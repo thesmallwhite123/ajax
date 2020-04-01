@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="myajax.js"></script>
+</head>
+<body>
+    <div id="content">
+        <div id="top">
+            <h2 class="title">每日一文~~~~</h2>
+            <form class="date" active="#" method="get">
+                <input type="text"  name="date" placeholder="请输入20200324格式的日期">
+                <button class="search" type="submit">搜索</button>
+            </form>
+            <h1 class="textTitle"></h1>
+            <div class="author"></div>
+            <div class="textDate"></div>
+            <form class="pageTurning">
+                <button class="prev" type="submit">上一页</button>
+                <button class="next" type="submit">下一页</button>
+            </form>
+        </div>
+        <div class="text"></div>
+        <a href="#" class="randomBtn"></a>
+    </v>
+    <script>
+        var title = document.querySelector(".textTitle"),
+            author = document.querySelector(".author"),
+            nDate = document.querySelector(".textDate"),
+            text = document.querySelector(".text"),
+            randomBtn = document.querySelector(".randomBtn"),
+            search = document.querySelector(".search"),
+            infoForm = document.querySelector(".date"),
+            prev = document.querySelector(".prev");
+            next = document.querySelector(".next");
+            prevDate = '';
+            nextDate = '';
+
+        //获取当天文章
+        addContent("today",{"dev": 1});
+
+        //获取随机一天文章
+        randomBtn.onclick = function(){
+            addContent("random",{"dev":1});
+        }
+
+        //指定日期获得文章
+        search.addEventListener("click",function(e){
+            //取消默认事件
+            e.preventDefault();
+            var fContent = _.formSerializeToJson(infoForm);
+            console.log(fContent);
+            //显示指定日期的文章内容
+            addContent("day",{"dev":1,"date":fContent.date});
+        });
+
+        //前一天后一天文章
+        prev.onclick = function(){
+            addContent("day",{"dev":1,"date":prevDate});
+        }
+        next.onclick = function(){
+            addContent("day",{"dev":1,"date":nextDate});
+        }
+
+        function addContent(date,json){
+            _.get("https://interface.meiriyiwen.com/article/"+date,
+            json,
+                //添加内容
+                function(data){
+                    //添加标题
+                    title.innerHTML = data.data.title;
+                    //添加作者
+                    author.innerHTML = data.data.author;
+                    //添加日期
+                    nDate.innerHTML = data.data.date.curr;
+                    //添加内容
+                    text.innerHTML = data.data.content;
+                    //前一天后一天的日期
+                    prevDate = data.data.date.prev;
+                    nextDate = data.data.date.next;
+                }
+            );
+        }
+    </script>
+</body>
+</html>

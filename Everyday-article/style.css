@@ -1,0 +1,71 @@
+html,body{
+    width:100%;
+    height:100%;
+}
+body{
+    margin:0;
+    padding:0;
+}
+#content{
+    margin:0 8rem;
+}
+#top{
+    width:100%;
+    height:20rem;
+    background-color:#525252;
+    overflow:hidden;
+    position:relative;
+}
+.title{
+    display:inline-block;
+    margin:0;
+    padding:2rem;
+    color:#ffffff;
+}
+.date{
+    float:right;
+    display:inline-block;
+    height:2rem;
+    line-height:2rem;
+    margin:2rem;
+}
+.date > input,.date > button{
+    padding:.2rem;
+    vertical-align: middle;
+}
+.textTitle,.author,.textDate{
+    text-align:center;
+    color:#ffffff;
+}
+.textDate{
+    margin-top:.5rem;
+}
+.pageTurning{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    overflow:hidden;
+}
+.pageTurning > button:first-of-type{
+    float:left;
+    margin:1rem 2rem;
+}
+.pageTurning > button:last-of-type{
+    float:right;
+    margin:1rem 2rem;
+}
+.text{
+    line-height:2rem;
+    letter-spacing: .1rem;
+}
+.randomBtn{
+    position:fixed;
+    bottom:4rem;
+    right:4rem;
+    display:inline-block;
+    width:2rem;
+    height:2rem;
+    text-decoration: none;
+    background-image:url("./suiji.jpg");
+    background-size:100% 100%;
+}
