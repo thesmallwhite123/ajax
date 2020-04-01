@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="myajax.js"></script>
+    <script type="text/javascript" src="jquery/3/jquery-3.4.1.js"></script>
+</head>
+<body>
+    <div id="outer">
+        <div class="header">
+            <h1 class="topFontColor title">谜语大全</h1>
+            <form active="#" method="get" class="searchForm">
+                <input type="text" placeholder="请输入您要搜索的谜语">
+                <button type="button">搜索</button>
+            </form>
+            <ul class="classify"></ul>
+        </div>
+        <div class="main">
+            <span class="content">方寸之间见人心（打一字）</span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="answer">咐</span>
+        </div>
+    </div>
+    <script>
+        //谜语分类
+        _.jsonp("https://api.jisuapi.com/miyu/class",
+        {"appkey":"62da6ef2eac9e931"},
+        "fenlei",
+        function(data,error){
+            $.each(data.result,function(a,b){
+                //将分类添加到页面的分类中
+                var li = document.createElement("li");
+                li.className="classify-li";
+                li.innerHTML = data.result[a].name;
+                $(".classify").append(li);
+
+                //点击分类时产生的效果
+                $(".classify-li")[a].onclick = function(){
+                    $.each(data.result,function(index){
+                        $(".classify-li")[index].className = "classify-li";
+                    });
+                    $(".classify-li")[a].className = "classify-li classifyHover";
+
+                    //分类数据
+                    _.jsonp("https://api.jisuapi.com/miyu/search",
+                    {"appkey":"62da6ef2eac9e931",
+                    "pagenum":1,
+                    "pagesize":1,
+                    "classid":data.result[a].classid},
+                    "shuju",
+                    function(data,error){
+                        $(".content").text(data.result.list[0].content);
+                        $(".answer").text(data.result.list[0].answer);
+                    }
+                    );
+                }
+            });
+        }
+        );
+
+        //谜语查询
+        $(".searchForm > button").click(function(){
+            var searchContent = $(".searchForm > input").val();
+            _.jsonp("https://api.jisuapi.com/miyu/search",
+                    {"appkey":"62da6ef2eac9e931",
+                    "keyword":searchContent,
+                    "pagenum":1,
+                    "pagesize":1},
+                    "shuju",
+                    function(data,error){
+                        $(".content").text(data.result.list[0].content);
+                        $(".answer").text(data.result.list[0].answer);
+                        console.log(error);
+                    }
+            );
+        });
+    </script>
+</body>
+</html>
